@@ -1,32 +1,40 @@
-export default function init () {
-  const game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render })
+import Player from './classes/player'
 
-  function preload () {
-    game.load.image('arrow', 'assets/sprites/arrow.png')
+export default () => {
+
+  var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render })
+
+  function preload() {
+    game.load.spritesheet('dude', 'assets/games/starstruck/dude.png', 32, 48)
+    game.load.image('background', 'assets/games/starstruck/background2.png')
   }
 
-  let sprite
+  var player
+  var cursors
+  var bg
 
-  function create () {
+  function create() {
     game.physics.startSystem(Phaser.Physics.ARCADE)
 
-    game.stage.backgroundColor = '#0072bc'
+    bg = game.add.tileSprite(0, 0, 800, 600, 'background')
 
-    sprite = game.add.sprite(400, 300, 'arrow')
-    sprite.anchor.setTo(0.5, 0.5)
+    game.physics.arcade.gravity.y = 300
 
-    //  Enable Arcade Physics for the sprite
-    game.physics.enable(sprite, Phaser.Physics.ARCADE)
+    player = new Player(game, 32, 320, 'dude')
+    game.add.existing(player)
 
-    //  Tell it we don't want physics to manage the rotation
-    sprite.body.allowRotation = false
+    game.physics.enable(player, Phaser.Physics.ARCADE)
+
+    cursors = game.input.keyboard.createCursorKeys()
+
+    player.init(cursors)
   }
 
-  function update () {
-    sprite.rotation = game.physics.arcade.moveToPointer(sprite, 60, game.input.activePointer, 500)
+  function update() {
+    player.update()
   }
 
   function render () {
-    game.debug.spriteInfo(sprite, 32, 32)
+
   }
 }

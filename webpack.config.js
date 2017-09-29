@@ -26,6 +26,10 @@ module.exports = {
   resolve: {
     modulesDirectories: ['node_modules', './js'],
     extensions: ['', '.js', '.jsx', '.scss', '.sass', '.jade'],
+    alias:{
+      'assets':path.join(__dirname,'assets'),
+      'vendor':path.join(__dirname,'vendor')
+    }
   },
   module: {
     loaders: [
