@@ -1,0 +1,15 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["standard", "standard-react"],
+  "globals": {
+    "React": true,
+    "Phaser": true,
+    "alert": true,
+  },
+  "rules": {
+    'comma-dangle': ["error", 'always-multiline'],
+    'semi': ["error", "never"],
+    'react/react-jsx-in-scope': 0,
+    'no-return-assign': 0,
+  },
+}
