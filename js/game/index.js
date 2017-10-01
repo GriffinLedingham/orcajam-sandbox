@@ -1,4 +1,5 @@
 import Player from './classes/player'
+import Level from './classes/level'
 
 export default () => {
 
@@ -6,32 +7,41 @@ export default () => {
 
   function preload() {
     game.load.spritesheet('dude', 'assets/games/starstruck/dude.png', 32, 48)
+    game.load.image('ground', 'assets/games/starstruck/ground.png')
     game.load.image('background', 'assets/games/starstruck/background2.png')
   }
 
   var player
   var cursors
   var bg
+  var walls
+  var level
 
   function create() {
+    // game.stage.disableVisibilityChange = true
     game.physics.startSystem(Phaser.Physics.ARCADE)
+    game.world.enableBody = true
 
-    bg = game.add.tileSprite(0, 0, 800, 600, 'background')
+    level = new Level(game)
+    level.buildLevel()
 
-    game.physics.arcade.gravity.y = 300
-
-    player = new Player(game, 32, 320, 'dude')
+    player = new Player(game, 300, 320, 'dude')
     game.add.existing(player)
-
     game.physics.enable(player, Phaser.Physics.ARCADE)
 
-    cursors = game.input.keyboard.createCursorKeys()
+    player.init(game.input.keyboard.createCursorKeys())
+    player.setCollision(level.getColliders())
+    player.setDetects(level.getHitDetects())
 
-    player.init(cursors)
+    document.player = player
+    document.level = level
   }
 
   function update() {
+    game.world.setBounds(player.position.x - 400, 0, 1600, 1200);
+
     player.update()
+    level.update(player.getPlayerSpeed())
   }
 
   function render () {
